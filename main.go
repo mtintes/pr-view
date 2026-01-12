@@ -140,6 +140,7 @@ type PullRequest struct {
 	Number    int       `json:"number"`
 	Title     string    `json:"title"`
 	HTMLURL   string    `json:"html_url"`
+	State     string    `json:"state"`
 	User      User      `json:"user"`
 	CreatedAt time.Time `json:"created_at"`
 }
@@ -281,7 +282,27 @@ func cmdList() int {
 	for res := range ch {
 		results = append(results, res)
 	}
-	printTable(results)
+	// Automatically remove closed PR entries (owner/repo#number) from the store
+	var alive []PRResult
+	for _, res := range results {
+		removed := false
+		if strings.Contains(res.Repo, "#") {
+			if res.Err == nil && len(res.PRs) == 1 {
+				if strings.ToLower(res.PRs[0].State) != "open" {
+					if err := store.Remove(res.Repo); err == nil {
+						fmt.Println("removed closed PR", res.Repo)
+					} else {
+						fmt.Println("error removing closed PR", res.Repo+":", err)
+					}
+					removed = true
+				}
+			}
+		}
+		if !removed {
+			alive = append(alive, res)
+		}
+	}
+	printTable(alive)
 	return 0
 }
 
