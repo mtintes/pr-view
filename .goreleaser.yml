@@ -1,0 +1,34 @@
+project_name: pr-view
+
+builds:
+  - binary: pr-view
+    main: .
+    ldflags: -s -w
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - format: tar.gz
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  use: git
+
+release:
+  github: {}
+
+brews:
+- name: pr-view
+  homepage: https://github.com/mtintes/pr-view
+  repository:
+    owner: mtintes
+    name: homebrew-pr-view
