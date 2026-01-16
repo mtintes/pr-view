@@ -2,7 +2,7 @@
 
 Simple CLI to collect open pull requests from multiple GitHub repositories.
 
-Usage
+## Usage
 
 - Add a repo (owner/repo):
 
@@ -21,11 +21,22 @@ pr-view add "<PR_URL>"
 pr-view list
 ```
 
-Configuration
+## Install
+
+```bash
+brew install mtintes/pr-view/pr-view
+```
+or
+```bash
+brew tap mtintes/pr-view 
+brew install pr-view
+```
+
+## Configuration
 
 Repos are stored as JSON at `~/.configs/pr-view/repos.json`.
 
-Authentication
+## Authentication
 
 Set `GITHUB_TOKEN` environment variable for authenticated requests (higher rate limits):
 
